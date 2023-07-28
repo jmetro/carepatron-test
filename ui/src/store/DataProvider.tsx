@@ -1,5 +1,5 @@
-import React, { createContext, useReducer } from "react";
-
+import React, { createContext, useReducer } from 'react';
+import { ACTIONS } from './Actions';
 const initialState: IApplicationState = {
   clients: [],
 };
@@ -11,10 +11,6 @@ export const StateContext = createContext<{
   // @ts-ignore
   null
 );
-
-export const ACTIONS = {
-  FETCH_ALL_CLIENTS: "FETCH_ALL_CLIENTS",
-};
 
 type Action = {
   type: keyof typeof ACTIONS;
