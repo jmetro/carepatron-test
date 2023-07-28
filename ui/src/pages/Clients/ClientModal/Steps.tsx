@@ -12,7 +12,7 @@ const Steps = ({ forms }: { forms: ClientFormProps[] }) => {
         <Step
           key={form.id}
           active={form.active}
-          sx={{ '.completedColor': { color: theme.palette.success.main } }}
+          sx={{ '.completedColor.MuiStepIcon-root': { color: theme.palette.success.main } }}
         >
           <Grid container>
             <StepIcon

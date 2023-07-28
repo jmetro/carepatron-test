@@ -8,20 +8,21 @@ import React, {
 import { Stepper, Button, Grid } from '@mui/material';
 import { useForm, FormProvider } from 'react-hook-form';
 
-import BasicModal from '../../components/BasicModal';
-import ModalFooter from '../../components/BasicModal/ModalFooter';
-import ClientModalForms from './ClientModal/Forms';
-import Steps from './ClientModal/Steps';
-import StepperContainer from './ClientModal/StepperContainer';
-import { formsConfig, defaultInputValues } from '../../configs/ClientModal';
-import { StateContext } from '../../store/DataProvider';
-import { ACTIONS } from '../../store/Actions';
-import { createClient } from '../../services/api';
-import { getClients } from '../../services/api';
+import BasicModal from '../../../components/BasicModal';
+import ModalFooter from '../../../components/BasicModal/ModalFooter';
+import ClientModalForms from './Forms';
+import Steps from './Steps';
+import StepperContainer from './StepperContainer';
+import { formsConfig, defaultInputValues } from '../../../configs/ClientModal';
+import { StateContext } from '../../../store/DataProvider';
+import { ACTIONS } from '../../../store/Actions';
+import { createClient } from '../../../services/api';
+import { getClients } from '../../../services/api';
 
 const ClientModal = ({ open, onClose }: BasicModal.BasicModalProps) => {
   const { dispatch } = useContext(StateContext);
   const [forms, setForms] = useState(formsConfig);
+  const [isSaving, setIsSaving] = useState(false);
   const methods = useForm<IClient>({
     defaultValues: defaultInputValues,
   });
@@ -44,10 +45,17 @@ const ClientModal = ({ open, onClose }: BasicModal.BasicModalProps) => {
 
   const handleCreateNewClient = useCallback(
     async (data: IClient) => {
-      await createClient(data);
-      const clients = await getClients();
-      dispatch({ type: ACTIONS.FETCH_ALL_CLIENTS, data: clients });
-      onClose && onClose();
+      setIsSaving(true);
+      try {
+        await createClient(data);
+        const clients = await getClients();
+        dispatch({ type: ACTIONS.FETCH_ALL_CLIENTS, data: clients });
+        setIsSaving(false);
+        onClose && onClose();
+      } catch (e) {
+        setIsSaving(false);
+        console.error(e);
+      }
     },
     [dispatch, onClose]
   );
@@ -92,7 +100,11 @@ const ClientModal = ({ open, onClose }: BasicModal.BasicModalProps) => {
             </Stepper>
           </StepperContainer>
           <Grid container item spacing={2} direction="column" sx={{ mt: 1 }}>
-            <ClientModalForms forms={forms} activeStep={activeStep} />
+            <ClientModalForms
+              forms={forms}
+              activeStep={activeStep}
+              disabled={isSaving}
+            />
           </Grid>
           <ModalFooter container justifyContent="space-between">
             <Grid item>

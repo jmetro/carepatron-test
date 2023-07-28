@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react';
 import { TextField, Grid } from '@mui/material';
 import { useFormContext, Controller } from 'react-hook-form';
 
-const ClientModalForms = ({ forms, activeStep = 0 }: ClientModalFormProps) => {
+const ClientModalForms = ({ forms, activeStep = 0, disabled }: ClientModalFormProps) => {
   const { control, formState, trigger } = useFormContext();
   const { dirtyFields, isSubmitted, errors, touchedFields } = formState;
   const activeForm = forms.find((form, index) => index === activeStep);
@@ -42,6 +42,7 @@ const ClientModalForms = ({ forms, activeStep = 0 }: ClientModalFormProps) => {
                     onBlur={(e) => onBlurHandler(e, field.onBlur)}
                     error={hasError}
                     helperText={hasError && 'This field is required.'}
+                    disabled={disabled}
                   />
                 </>
               )}

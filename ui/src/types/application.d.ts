@@ -61,4 +61,5 @@ interface ClientFormProps {
 interface ClientModalFormProps {
   forms: ClientFormProps[];
   activeStep?: number;
+  disabled?: boolean
 }

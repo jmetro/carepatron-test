@@ -54,8 +54,7 @@ const SearchBar = ({ onSearch, ContainerProps, ...props }: SearchBarProps) => {
                 <Search />
               </IconButton>
             </InputAdornment>
-          ),
-          disableUnderline: true,
+          )
         }}
       />
     </Grid>
